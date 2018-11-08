@@ -1,7 +1,11 @@
 /**
  * https://github.com/AndersKaloer/Ring-Buffer
  * Copyright (c) 2014 Anders Kalør
+ *
+ * Adapted to use c++ templates, Copyright (c) 2018 Andrew Goh
  * Provided as-is, No warranties of any kind, Use at your own risk
+ * License: MIT
+ *
  */
 
 #ifndef RINGBUFFER_H

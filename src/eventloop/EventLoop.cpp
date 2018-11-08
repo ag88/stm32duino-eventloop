@@ -60,6 +60,12 @@ void CEventLoop::setup() {
 
 int8_t CEventLoop::post(Event& event) {
 
+/* if you have no interrupts ISR that post events using this method
+ * you could comment the
+ * noInterrupts();
+ * interrupts();
+ * statements which may improve performance
+ */
 	if(m_eventbuffer->is_full()) return -1;
 	noInterrupts();
 	m_eventbuffer->push(event);
@@ -99,6 +105,13 @@ bool CEventLoop::proceventimm(Event& event) {
 void CEventLoop::processevent() {
 
 	while(!m_eventbuffer->is_empty()) {
+		/* if you have no interrupts ISR that post events using this method
+		 * you could comment the
+		 * noInterrupts();
+		 * interrupts();
+		 * statements which may improve performance
+		 */
+
 		noInterrupts();
 		TEvent *pevent = m_eventbuffer->pop();
 		interrupts();
