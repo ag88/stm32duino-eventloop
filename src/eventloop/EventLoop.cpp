@@ -59,7 +59,7 @@ void CEventLoop::setup() {
 
 
 int8_t CEventLoop::post(Event& event) {
-	//nointerrupts()
+	noInterrupts();
 
 	if(m_eventbuffer->is_full()) return -1;
 	m_eventbuffer->push(event);
@@ -68,7 +68,7 @@ int8_t CEventLoop::post(Event& event) {
 //	uint16_t ev = static_cast<uint16_t>(event.event);
 //	Serial.println(ev);
 
-	//interrupts()
+	interrupts();
 	return 0;
 }
 
@@ -105,7 +105,9 @@ bool CEventLoop::proceventimm(Event& event) {
 void CEventLoop::processevent() {
 
 	while(!m_eventbuffer->is_empty()) {
+		noInterrupts();
 		TEvent *pevent = m_eventbuffer->pop();
+		interrupts();
 		if(pevent == NULL) continue;
 
 		proceventimm(*pevent);
