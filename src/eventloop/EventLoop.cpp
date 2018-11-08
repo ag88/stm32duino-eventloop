@@ -59,22 +59,16 @@ void CEventLoop::setup() {
 
 
 int8_t CEventLoop::post(Event& event) {
-	noInterrupts();
 
 	if(m_eventbuffer->is_full()) return -1;
+	noInterrupts();
 	m_eventbuffer->push(event);
+	interrupts();
 
 //	Serial.print("post:");
 //	uint16_t ev = static_cast<uint16_t>(event.event);
 //	Serial.println(ev);
 
-	interrupts();
-	return 0;
-}
-
-int8_t CEventLoop::postfromInt(Event& event) {
-	if(m_eventbuffer->is_full()) return -1;
-	m_eventbuffer->push(event);
 
 	return 0;
 }
