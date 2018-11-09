@@ -92,7 +92,7 @@ When you want to do an async wait:
    1. create an event
    2. call the wait manager with the handle obtained earlier to get a pointer to one of the slots (think take the alarm clock)
    3. call CAsyncWait.setwait(uint32_t duration, bool repeat, Event& event, bool imm);
-if you set repeat the event would be posted repeatedly every same duration, event is the event you've created, imm (immediate) does not mean that it blocks, rather when the wait manager sees that the time is up, it can call the event handler immediately bypassing the event queue, this may make some things more prompt, nevertheless it is *async, not real time*
+If you set repeat the event would be posted repeatedly every same duration. Event is the event you've created, imm (immediate) does not mean that it blocks, rather when the wait manager sees that the time is up, it can call the event handler immediately bypassing the event queue. This may make some things more prompt, nevertheless it is *async, not real time*. Duration strictly speaking is the number of systicks on Libmaple, i.e. 1ms each if nothing changed. or tl;dr: milliseconds.
    4. after calling setwait() note that the wait does not immediately take effect, you need to call CAsyncWait.await(); to start that wait timer. This design is necessary due to the repeat option in setting the wait slot, i.e. the same wait slot can keep firing events periodically
 [src](https://github.com/ag88/stm32duino-eventloop/blob/a80b09a7551616377ce280455e5279dba21da116/src/tasks/CLedTask.cpp#L72)
 
