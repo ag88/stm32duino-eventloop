@@ -7,25 +7,25 @@ This may possibly work on other Arduinos but it hasn't been tested on those
 #### try the demo:
 In bin there is a pre-compiled flash image for maple mini 
 [ bin/STM32duinoEventloop.bin ]( https://github.com/ag88/stm32duino-eventloop/tree/master/bin )
-##### prequisites
-you need a maple mini (or compatible board)
+##### prerequisites
+You need a maple mini (or compatible board)
 [ maple mini ]( https://www.leaflabs.com/maple/ )
 [ link to ebay  ]( https://www.ebay.com/sch/i.html?_from=R40&_nkw=maple+mini&_sacat=0 )
 
-the flash image is targetted for the maple mini (and clones) (i.e. the led pin on pin 33 PB1) and should use the [ stm32duino bootloader ]( https://github.com/rogerclarkmelbourne/STM32duino-bootloader ) (i.e. image installed at 0x8002000)
-you can install it to maple mini using [ dfu-util ]( http://dfu-util.sourceforge.net/ )
+The flash image is targetted for the maple mini (and clones) (i.e. the led pin on pin 33 PB1) and should use the [ stm32duino bootloader ]( https://github.com/rogerclarkmelbourne/STM32duino-bootloader ) (i.e. image installed at 0x8002000)
+You can install it to maple mini using [ dfu-util ]( http://dfu-util.sourceforge.net/ )
 
 ` dfu-util -a 2 -RD STM32duinoEventloop.bin `
 
-the full details is beyond the scope here, you may find more details on 
+The full details is beyond the scope here, you may find more details on 
 [ Arduino STM32 wiki ](https://github.com/rogerclarkmelbourne/Arduino_STM32/wiki/Installation)
 [wiki](http://wiki.stm32duino.com/index.php?title=Installation)
 
 ##### running the demo
-* you need a serial console, you can use the Arduino IDE's serial console or apps like putty etc.
-* connect to maple mini over usb serial with the serial console, type '?' or 'h' and you should see the prompt:
+* You need a serial console, you can use the Arduino IDE's serial console or apps like putty etc.
+* Connect to maple mini over usb serial with the serial console, type '?' or 'h' and you should see the prompt:
 `f - faster, s - slower, m - memory`
-* you can change the blink rate of the led by keying f - faster or s - slower
+* You can change the blink rate of the led by keying f - faster or s - slower
 
 ### how it works:
 
@@ -43,14 +43,14 @@ This makes the loop() run every milliseconds, in effect making it a scheduler, i
 In this demo there are 2 event handler classes:
 * key sender  CKeySenderTask.cpp  
 In key sender, it handles the systick event, poll usbserial for inputs and handles key inputs
-[src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/tasks/CKeySenderTask.cpp#L18)
+[src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/tasks/CKeySenderTask.cpp#L18)  
 the interesting parts is where it post key input events to the event queue:
 [src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/tasks/CKeySenderTask.cpp#L58)
 [src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/tasks/CKeySenderTask.cpp#L97)
 
 * led task CLedTask.cpp  
 The event loop then calls the handleEvent method of the CLedTask (this is the main event handler callback for all the event handler classes)
-[src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/tasks/CLedTask.cpp#L29)
+[src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/tasks/CLedTask.cpp#L29)  
 this is where the led task (or your apps handle the events)
 
 #### how did the led blink?
@@ -66,18 +66,18 @@ Hence CLedTask handles 2 events ledon() which calls AsyncWait to enqueue a ledof
 The examples are in [ Tasks ](https://github.com/ag88/stm32duino-eventloop/tree/master/src/tasks)
 
 The main steps are:
-1. In the arduino/wiring setup(), register the event handler object, note that it is an object not simply a class, hence you need to instantiate that as a global variable 
+1. In the arduino/wiring setup(), register the event handler object. Note that it is an object not simply a class, hence you need to instantiate that as a global variable 
 [src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/mainloop.cpp#L38)
 2. Implement the handleEvent() in the class, the eventloop() calls this. 
-[src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/tasks/CLedTask.cpp#L29)
-when the sketch runs setup() post a EventID::AppStart event to all the event handlers
-[src](https://github.com/ag88/stm32duino-eventloop/blob/a80b09a7551616377ce280455e5279dba21da116/src/mainloop.cpp#L49)
-this is so that the event handlers can initialize after Arduino setup() has run but just before arduino loop() runs
+[src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/tasks/CLedTask.cpp#L29)  
+When the sketch runs setup() post a EventID::AppStart event to all the event handlers
+[src](https://github.com/ag88/stm32duino-eventloop/blob/a80b09a7551616377ce280455e5279dba21da116/src/mainloop.cpp#L49)  
+This is so that the event handlers can initialize after Arduino setup() has run but just before arduino loop() runs
 3. Events:  
-you need to enumerate your events in events.h
-[src](https://github.com/ag88/stm32duino-eventloop/blob/a80b09a7551616377ce280455e5279dba21da116/src/eventloop/Event.h#L11)
-the event handlers need to be enumerated as well in events.h
-events has 2 parameters which are declared as int (it is possible cast pointers into them and use them to pass pointers in the events)
+You need to enumerate your events in events.h
+[src](https://github.com/ag88/stm32duino-eventloop/blob/a80b09a7551616377ce280455e5279dba21da116/src/eventloop/Event.h#L11)  
+The event handlers need to be enumerated as well in events.h  
+Events has 2 parameters which are declared as int (it is possible cast pointers into them and use them to pass pointers in the events)
 [src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/eventloop/Event.h#L47)
 4. Limits:  
 The event queue is a 128 entry ring buffer, if it is full, CEventLoop::post(event) returns -1 event not added ! hence be careful about posting too many events if they aren't handled)
@@ -85,10 +85,10 @@ The event queue is a 128 entry ring buffer, if it is full, CEventLoop::post(even
 [src](https://github.com/ag88/stm32duino-eventloop/blob/a80b09a7551616377ce280455e5279dba21da116/src/eventloop/EventLoop.h#L12)
 5. Async wait:  
 Async wait works by posting an event after a delay, there are 32 wait slots (evaluated every systick i.e. every 1 ms, so that is multiplied if you want more slots)
-[src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/eventloop/ASyncWait.h)
-to use them first get a handle to a wait slot
-[src](https://github.com/ag88/stm32duino-eventloop/blob/a80b09a7551616377ce280455e5279dba21da116/src/tasks/CLedTask.cpp#L60)
-when you want to do an async wait:
+[src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/eventloop/ASyncWait.h)  
+To use them first get a handle to a wait slot
+[src](https://github.com/ag88/stm32duino-eventloop/blob/a80b09a7551616377ce280455e5279dba21da116/src/tasks/CLedTask.cpp#L60)  
+When you want to do an async wait:
    1. create an event
    2. call the wait manager with the handle obtained earlier to get a pointer to one of the slots (think take the alarm clock)
    3. call CAsyncWait.setwait(uint32_t duration, bool repeat, Event& event, bool imm);
