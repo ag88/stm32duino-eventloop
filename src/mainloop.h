@@ -7,9 +7,9 @@
 #ifndef MAINLOOP_H
 #define MAINLOOP_H
 
-//board led pin 33 PB1
-//this is actually not required if you compile it using the arduino IDE
-//otherwise indicate the led pin number for digitalWrite(BOARD_LED_PIN, HIGH/LOW);
+// board led pin 33 PB1 is used here for maple mini
+// this is actually not required if you compile it using the arduino IDE
+// otherwise replace this and indicate the led pin number on your board
 #define BOARD_LED_PIN 33
 
 #endif
