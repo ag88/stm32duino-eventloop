@@ -110,11 +110,11 @@ case EventID::ShowText:
   char *string = reinterpret_cast<char *>(event.param1);
   // codes to show the text 
 ```
-4. Limits:  
+5. Limits:  
 The event queue is a 128 entry ring buffer, if it is full, CEventLoop::post(event) returns -1 event not added ! hence be careful about posting too many events if they aren't handled)
 20 event handler (classes/objects))
 [src](https://github.com/ag88/stm32duino-eventloop/blob/a80b09a7551616377ce280455e5279dba21da116/src/eventloop/EventLoop.h#L12)
-5. Async wait:  
+6. Async wait:  
 Async wait works by posting an event after a delay, there are 32 wait slots (evaluated every systick i.e. every 1 ms, so that is multiplied if you want more slots)
 [src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/eventloop/ASyncWait.h)  
 To use them first get a handle to a wait slot
