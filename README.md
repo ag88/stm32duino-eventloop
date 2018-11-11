@@ -77,7 +77,7 @@ This is so that the event handlers can initialize after Arduino setup() has run 
 You need to enumerate your events in events.h
 [src](https://github.com/ag88/stm32duino-eventloop/blob/a80b09a7551616377ce280455e5279dba21da116/src/eventloop/Event.h#L11)  
 The event handlers need to be enumerated as well in events.h 
-4. Passing parameters in events
+4. Passing parameters in events  
 Events has 2 parameters which are declared as int
 [src](https://github.com/ag88/stm32duino-eventloop/blob/master/src/eventloop/Event.h#L47)  
 the key sender task post keystrokes to the event queue as follows:
