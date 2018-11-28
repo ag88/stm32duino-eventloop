@@ -6,8 +6,8 @@
 
 #ifndef ASYNCWAIT_H_
 #define ASYNCWAIT_H_
-#include "../eventloop/Event.h"
-#include "../eventloop/EventLoop.h"
+#include "Event.h"
+#include "EventLoop.h"
 
 #define MAX_WAIT_SLOTS	32
 
@@ -19,6 +19,7 @@ struct SWait {
 			uint8_t bclaimed :1; //claimed
 			uint8_t brepeat :1; //repeats
 			uint8_t bimm :1; 	//immediate
+			uint8_t boneoff:1; //oneoff
 		} bits;
 		uint8_t flags;
 	};
@@ -40,6 +41,7 @@ public:
 	bool isclaimed();
 	void setclaimed(bool claimed);
 	void await();
+	void await(uint32_t duration, Event& event, bool imm);
 	void awaituntil();
 	void init();
 	void stop();
@@ -59,6 +61,7 @@ public:
 	uint8_t getHandle();
 	void releaseHandle(uint8_t handle);
 	CAsyncWait& get(uint8_t handle);
+	void await(uint32_t duration, Event& event, bool imm);
 
 	void processwaits();
 
@@ -70,4 +73,4 @@ private:
 extern CWaitMgr WaitMgr;
 
 
-#endif
+#endif /* ASYNCWAIT_H_ */

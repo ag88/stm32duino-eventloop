@@ -3,6 +3,7 @@
  * Provided as-is, No warranties of any kind, Use at your own risk
  * License: MIT
 */
+
 #include "ASyncWait.h"
 
 CAsyncWait::CAsyncWait() {
@@ -42,6 +43,17 @@ void CAsyncWait::await() {
 	m_wait.bits.bactive = true;
 }
 
+void CAsyncWait::await(uint32_t duration, Event& event, bool imm) {
+	m_wait.duration = duration;
+	m_wait.bits.brepeat = false;
+	m_wait.bits.boneoff = true;
+	m_wait.event = event;
+	m_wait.bits.bimm = imm;
+	m_wait.last_fired = systick_uptime();
+	m_wait.bits.bactive = true;
+}
+
+
 void CAsyncWait::awaituntil() {
 	m_wait.bits.bactive = true;
 }
@@ -80,7 +92,12 @@ void CAsyncWait::processwait() {
 				EventLoop.proceventimm(m_wait.event);
 			else
 				EventLoop.post(m_wait.event);
-			if(!m_wait.bits.brepeat) //single shot
+			if(m_wait.bits.boneoff) { //oneshot
+				m_wait.flags = 0x0;
+				m_wait.last_fired = 0;
+				m_wait.duration = 0;
+			}
+			if(!m_wait.bits.brepeat) //repeat
 				m_wait.bits.bactive = false;
 		}
 	}
@@ -114,6 +131,12 @@ void CWaitMgr::releaseHandle(uint8_t handle) {
 CAsyncWait& CWaitMgr::get(uint8_t handle) {
 	CAsyncWait& wait = m_wait[handle-1];
 	return wait;
+}
+
+void CWaitMgr::await(uint32_t duration, Event& event, bool imm) {
+	uint8_t hwait = getHandle();
+	CAsyncWait& wait = get(hwait);
+	wait.await(duration, event, imm);
 }
 
 

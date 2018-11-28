@@ -57,8 +57,6 @@ bool CLedTask::handleEvent(Event& event) {
 
 void CLedTask::setup() {
 
-	hWaitLed = WaitMgr.getHandle();
-
 	ledon();
 
 }
@@ -71,9 +69,7 @@ void CLedTask::ledon() {
 
 	event.handle_id = EHandleID::LedTask;
 	event.event = EventID::LedTaskLedOff;
-	CAsyncWait& wait = WaitMgr.get(hWaitLed);
-	wait.setwait(ledduration,false,event,false);
-	wait.await();
+	WaitMgr.await(ledduration,event,false);
 }
 
 
@@ -84,9 +80,7 @@ void CLedTask::ledoff() {
 
 	event.handle_id = EHandleID::LedTask;
 	event.event = EventID::LedTaskLedOn;
-	CAsyncWait& wait = WaitMgr.get(hWaitLed);
-	wait.setwait(ledduration,false,event,false);
-	wait.await();
+	WaitMgr.await(ledduration,event,false);
 }
 
 void CLedTask::faster() {

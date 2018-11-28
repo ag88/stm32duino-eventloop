@@ -120,6 +120,16 @@ Async wait works by posting an event after a delay, there are 32 wait slots (eva
 To use them first get a handle to a wait slot
 [src](https://github.com/ag88/stm32duino-eventloop/blob/a80b09a7551616377ce280455e5279dba21da116/src/tasks/CLedTask.cpp#L60)  
 When you want to do an async wait:
+* TL;DR: once off wait WaitMgr.await(int duration, Event &event, bool imm)
+duration in msec
+e.g. 
+```
+Event event;
+event.handle_id = EHandleID::LedTask;
+event.event = EventID::LedTaskLedOn;
+WaitMgr.await(1000, event, false); 
+```
+old way:
    1. create an event
    2. call the wait manager with the handle obtained earlier to get a pointer to one of the slots (think take the alarm clock)
    3. call CAsyncWait.setwait(uint32_t duration, bool repeat, Event& event, bool imm);
